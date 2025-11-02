@@ -1,3 +1,37 @@
+export enum LocationType {
+  CASTLE = 'castle',
+  GRAVEYARD = 'graveyard',
+  ABANDONED_BUILDING = 'abandoned_building',
+  FOREST = 'forest',
+  HOSPITAL = 'hospital'
+}
+
+export enum WeatherCondition {
+  CLEAR = 'clear',
+  CLOUDY = 'cloudy',
+  RAINY = 'rainy',
+  FOGGY = 'foggy',
+  STORMY = 'stormy'
+}
+
+export enum Season {
+  SPRING = 'spring',
+  SUMMER = 'summer',
+  AUTUMN = 'autumn',
+  WINTER = 'winter'
+}
+
+export interface EnvironmentalFactors {
+  temperature: number;
+  humidity: number;
+  pressure: number;
+  windSpeed: number;
+  visibility: number;
+  weather: WeatherCondition;
+  season: Season;
+  timeOfDay: number; // 0-23 hours
+}
+
 export interface Location {
   name: string;
   address: string;
@@ -5,7 +39,7 @@ export interface Location {
     latitude: number;
     longitude: number;
   };
-  type: string;
+  type: LocationType;
   nearbyPOIs: Array<{
     name: string;
     type: string;

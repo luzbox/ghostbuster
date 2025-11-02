@@ -1,4 +1,5 @@
-import { Router } from 'express';
+import express from 'express';
+const { Router } = express;
 import { asyncHandler, createError } from '../middleware/errorHandler.js';
 import { validateCoordinateParams, validateTimestamp } from '../middleware/validation.js';
 import { getCurrentWeather, getWeatherDescription } from '../services/weatherService.js';

@@ -289,7 +289,7 @@ export const logError = (error: ErrorInfo, context?: string): void => {
 /**
  * Create retry function with exponential backoff
  */
-export const createRetryFunction = <T>(
+export const createRetryFunction = <T,>(
   operation: () => Promise<T>,
   maxRetries: number = 3,
   baseDelay: number = 1000

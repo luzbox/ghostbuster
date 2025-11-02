@@ -1,4 +1,4 @@
-import { Coordinates, LocationType, WeatherCondition, Season } from '../types/index.js';
+import { Coordinates, LocationType, WeatherCondition, Season } from '../types/index';
 
 /**
  * Validates coordinates are within valid ranges
