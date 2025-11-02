@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": "Task Progress Tracker",
+  "description": "Monitors task completion events and generates progress reports with completion time, elapsed time, and credits used",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.js",
+      "src/**/*.jsx",
+      "*.md",
+      "package.json"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A task has been completed. As a spokesperson for the project stakeholders, update the \"progress_report.md\" file with a new entry containing: 1) current timestamp for task completion, 2) estimated elapsed time for this task, 3) estimated credits used for this task. Format each entry clearly and maintain a chronological log of all completed tasks."
+  }
+}
