@@ -1,24 +1,36 @@
-# Ghostbuster Webapp
+# 👻 Ghostbuster Webapp
 
 A web application that provides users with a "haunted rating" for any location based on multiple environmental and contextual factors.
 
-## Features
+## ✨ Features
 
 - 🗺️ Interactive dark-themed map interface
 - 👻 Real-time haunted rating calculations
 - 🌙 Atmospheric ghost visualizations
 - 📱 Responsive design with smooth animations
 - 🔍 Location search and exploration
+- 🧪 Comprehensive test suite with Vitest
+- 🎯 TypeScript for type safety
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend**: React 18 + TypeScript + Vite
-- **Styling**: Tailwind CSS with custom dark theme
-- **Mapping**: Mapbox GL JS
-- **Animations**: Framer Motion
-- **State Management**: Zustand
+**Frontend:**
+- React 18 + TypeScript + Vite
+- Tailwind CSS with custom dark theme
+- Mapbox GL JS for interactive maps
+- Framer Motion for animations
+- Zustand for state management
 
-## Getting Started
+**Backend:**
+- Node.js + Express + TypeScript
+- Environmental data APIs
+- Real-time calculation engine
+
+**Testing:**
+- Vitest + React Testing Library
+- Component and integration tests
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -28,17 +40,30 @@ A web application that provides users with a "haunted rating" for any location b
 ### Installation
 
 ```bash
-# Install dependencies
+# Install frontend dependencies
 npm install
 
-# Start development server
+# Install backend dependencies
+cd backend && npm install && cd ..
+
+# Set up environment variables
+cp .env.example .env
+cp backend/.env.example backend/.env
+```
+
+### Development
+
+```bash
+# Start frontend development server
 npm run dev
 
-# Build for production
-npm run build
+# Start backend server (in another terminal)
+cd backend && npm run dev
 
-# Preview production build
-npm run preview
+# Run tests
+npm test                    # Frontend tests
+npm run test:run           # Run tests once
+cd backend && npm test     # Backend tests
 ```
 
 ## Project Structure
