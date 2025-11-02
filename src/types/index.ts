@@ -3,7 +3,9 @@ export enum LocationType {
   GRAVEYARD = 'graveyard',
   ABANDONED_BUILDING = 'abandoned_building',
   FOREST = 'forest',
-  HOSPITAL = 'hospital'
+  HOSPITAL = 'hospital',
+  FORT = 'fort',
+  REGULAR = 'regular'
 }
 
 export enum WeatherCondition {
@@ -21,15 +23,26 @@ export enum Season {
   WINTER = 'winter'
 }
 
-export interface EnvironmentalFactors {
+export interface WeatherData {
+  condition: WeatherCondition;
   temperature: number;
-  humidity: number;
-  pressure: number;
-  windSpeed: number;
   visibility: number;
-  weather: WeatherCondition;
+  precipitation: boolean;
+  humidity: number;
+  windSpeed: number;
+}
+
+export interface TimeData {
+  hour: number;
+  isNighttime: boolean;
+  timezone: string;
+  localTime: string;
+}
+
+export interface EnvironmentalFactors {
+  weather: WeatherData;
+  time: TimeData;
   season: Season;
-  timeOfDay: number; // 0-23 hours
 }
 
 export interface Location {
@@ -64,4 +77,29 @@ export interface FactorBreakdown {
   weight: number;
   contribution: number;
   description: string;
+}
+
+export interface WeatherApiResponse {
+  weather: Array<{
+    main: string;
+    description: string;
+  }>;
+  main: {
+    temp: number;
+    humidity: number;
+  };
+  visibility: number;
+  wind: {
+    speed: number;
+  };
+}
+
+export interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+  expiresAt: number;
+}
+
+export interface WeatherCache {
+  [key: string]: CacheEntry<WeatherData>;
 }

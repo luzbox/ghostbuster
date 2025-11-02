@@ -1,4 +1,5 @@
 // Comprehensive error handling utilities
+import { Component } from 'react';
 import { ApiError } from '../services/api';
 
 export interface ErrorInfo {
@@ -357,7 +358,7 @@ export const createErrorBoundary = (
   fallbackComponent: React.ComponentType<{ error: ErrorInfo; retry: () => void }>,
   onError?: (error: ErrorInfo) => void
 ) => {
-  return class extends React.Component<
+  return class extends Component<
     { children: React.ReactNode },
     { error: ErrorInfo | null }
   > {
