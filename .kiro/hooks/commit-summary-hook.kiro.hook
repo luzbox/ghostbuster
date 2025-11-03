@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "Commit Summary Generator",
+  "description": "Automatically writes a summary of changes every time you commit code to the repository",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      ".git/COMMIT_EDITMSG",
+      ".git/logs/HEAD"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A commit has been made to the repository. Please analyze the recent changes and write a concise summary of what was committed. Include the key files modified, the nature of the changes (features, fixes, refactoring, etc.), and any notable impacts. Keep the summary clear and informative for future reference."
+  }
+}
