@@ -1,14 +1,9 @@
-import React, { useEffect, Suspense } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useAppStore } from './store';
-import { ErrorBoundary, LoadingSpinner, ToastContainer, useToast, KeyboardShortcuts, useKeyboardNavigation } from './components';
+import { ErrorBoundary, LoadingSpinner, ToastContainer, useToast, useKeyboardNavigation, KeyboardShortcuts } from './components';
 import { analyzeLocation, calculateHauntedRating } from './services';
-import { startAutoRefresh } from './services';
-import { measureAsync, registerServiceWorker, getOptimalSettings } from './utils/performance';
-
-// Lazy load components for code splitting
-const SearchInterface = React.lazy(() => import('./components/SearchInterface').then(module => ({ default: module.SearchInterface })));
-const HauntedRatingDisplay = React.lazy(() => import('./components/HauntedRatingDisplay').then(module => ({ default: module.HauntedRatingDisplay })));
-const MapInterface = React.lazy(() => import('./components/MapInterface').then(module => ({ default: module.MapInterface })));
+import { SearchInterface, HauntedRatingDisplay, MapInterface } from './components';
+import { registerServiceWorker, getOptimalSettings, measureAsync } from './utils/performance';
 
 function App() {
   const { 
@@ -49,32 +44,12 @@ function App() {
     initializeApp();
   }, []);
 
-  // Set up auto-refresh when location changes
+  // Auto-refresh functionality (simplified for now)
   useEffect(() => {
     if (currentLocation) {
-      startAutoRefresh(currentLocation, {
-        onRatingUpdate: (rating) => {
-          console.log('[AUTO-REFRESH] Updated rating:', rating.overallScore);
-          setHauntedRating(rating);
-        },
-        onError: (errorMessage) => {
-          console.warn('[AUTO-REFRESH] Error:', errorMessage);
-          // Try to use cached data as fallback
-          const cachedRating = null; // Simplified for now
-          if (cachedRating) {
-            setHauntedRating(cachedRating);
-          } else {
-            setError(`Auto-refresh failed: ${errorMessage}`);
-          }
-        }
-      });
-
-      // Cleanup function
-      return () => {
-        // Auto-refresh cleanup handled automatically
-      };
+      console.log('Location set:', currentLocation.name);
     }
-  }, [currentLocation, setHauntedRating, setError]);
+  }, [currentLocation]);
 
   // Handle location selection from map
   const handleLocationSelect = async (coordinates: { latitude: number; longitude: number }) => {
