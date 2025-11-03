@@ -38,7 +38,7 @@ export const KeyboardShortcuts: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isVisible]);
 
-  // const formatModifiers = (modifiers?: string[]) => {
+  // const _formatModifiers = (modifiers?: string[]) => {
   //   if (!modifiers || modifiers.length === 0) return '';
   //   return modifiers.join(' + ') + ' + ';
   // };

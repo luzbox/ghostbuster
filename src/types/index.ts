@@ -36,7 +36,7 @@ export interface TimeData {
   hour: number;
   isNighttime: boolean;
   timezone: string;
-  localTime: string;
+  localTime?: string;
 }
 
 export interface EnvironmentalFactors {
@@ -88,10 +88,25 @@ export interface WeatherApiResponse {
     temp: number;
     humidity: number;
   };
-  visibility: number;
+  visibility?: number;
   wind: {
     speed: number;
   };
+  rain?: {
+    '1h': number;
+  };
+  snow?: {
+    '1h': number;
+  };
+  sys?: {
+    sunrise: number;
+    sunset: number;
+  };
+  coord?: {
+    lat: number;
+    lon: number;
+  };
+  timezone?: number;
 }
 
 export interface CacheEntry<T> {
@@ -103,3 +118,149 @@ export interface CacheEntry<T> {
 export interface WeatherCache {
   [key: string]: CacheEntry<WeatherData>;
 }
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  cached?: boolean;
+}
+
+export interface ApiError {
+  message: string;
+  code: string;
+  statusCode?: number;
+}
+
+export interface RatingCalculationRequest {
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
+  locationName?: string;
+  timestamp?: string;
+}
+
+export interface RatingCalculationResponse {
+  success: boolean;
+  data?: HauntedRating;
+  error?: string;
+  cached?: boolean;
+}
+
+export interface LocationSearchResult {
+  name: string;
+  address: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  type: LocationType;
+  placeId?: string;
+}
+
+export interface PointOfInterest {
+  name: string;
+  type: string;
+  distance: number;
+}
+
+export interface PlacesApiResponse {
+  results: Array<{
+    name: string;
+    types: string[];
+    geometry: {
+      location: {
+        lat: number;
+        lng: number;
+      };
+    };
+    place_id: string;
+  }>;
+  status: string;
+}
+
+export interface GeocodingApiResponse {
+  features: Array<{
+    place_name: string;
+    center: [number, number];
+    properties: {
+      category?: string;
+    };
+    context: Array<{
+      id: string;
+      text: string;
+    }>;
+  }>;
+}
+
+export interface LocationCache {
+  [key: string]: CacheEntry<Location>;
+}
+
+// Additional missing types
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  cached?: boolean;
+}
+
+export interface ApiError extends Error {
+  statusCode?: number;
+  isOperational?: boolean;
+}
+
+export interface RatingCalculationRequest {
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
+  locationName?: string;
+  timestamp?: string;
+}
+
+export interface RatingCalculationResponse {
+  success: boolean;
+  data?: HauntedRating;
+  error?: string;
+  cached?: boolean;
+}
+
+// Removed duplicate LocationSearchResult interface
+
+export interface PointOfInterest {
+  name: string;
+  type: string;
+  distance: number;
+}
+
+export interface PlacesApiResponse {
+  results: Array<{
+    name: string;
+    types: string[];
+    geometry: {
+      location: {
+        lat: number;
+        lng: number;
+      };
+    };
+    place_id: string;
+  }>;
+  status: string;
+}
+
+export interface GeocodingApiResponse {
+  features: Array<{
+    place_name: string;
+    center: [number, number];
+    properties: {
+      category?: string;
+    };
+    context: Array<{
+      id: string;
+      text: string;
+    }>;
+  }>;
+}
+

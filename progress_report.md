@@ -98,12 +98,26 @@ This document tracks the completion of tasks for the Ghostbuster webapp, a web a
 - **Description:** Added production deployment scripts to package.json including start:production for local production testing, deploy:vercel for Vercel deployment, and deploy:netlify for Netlify deployment. These scripts streamline the deployment process and provide multiple hosting options for the application.
 - **Requirements Addressed:** Deployment infrastructure, DevOps improvement
 
+**Main App Component Switch**
+- **Completed:** November 2, 2025, 5:15 PM
+- **Estimated Time:** 2 minutes
+- **Estimated Credits:** 5 credits
+- **Description:** Updated main.tsx to import the full App component instead of App-simple, switching from the simplified development version to the complete application with all features including search interface, haunted rating display, and interactive map functionality.
+- **Requirements Addressed:** Application deployment readiness, Feature activation
+
+**Services Index Export Refactoring**
+- **Completed:** November 3, 2025, 12:00 PM
+- **Estimated Time:** 5 minutes
+- **Estimated Credits:** 10 credits
+- **Description:** Refactored services index.ts to use specific named exports instead of wildcard exports to avoid potential naming conflicts. Updated exports to include calculateHauntedRating from api, getCurrentWeather from weatherService, location analysis functions, environmental factors, and real-time service functions with clear function names.
+- **Requirements Addressed:** Code quality improvement, Module organization
+
 ---
 
 ## Summary Statistics
-- **Total Tasks Completed:** 13
-- **Total Estimated Time:** 12 hours 25 minutes
-- **Total Estimated Credits:** 975 credits
+- **Total Tasks Completed:** 15
+- **Total Estimated Time:** 12 hours 32 minutes
+- **Total Estimated Credits:** 990 credits
 - **Project Phase:** Core Algorithm Development (Phase 3)
 
 ## Next Priority Tasks

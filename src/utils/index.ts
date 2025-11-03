@@ -1,2 +1,12 @@
-// Placeholder utils file
-export const placeholder = 'utils';
+// Minimal utils placeholder
+export const debounce = <T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): ((...args: Parameters<T>) => void) => {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), wait);
+  };
+};

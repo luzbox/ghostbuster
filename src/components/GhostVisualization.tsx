@@ -21,7 +21,7 @@ interface GhostElement {
 
 export const GhostVisualization: React.FC<GhostVisualizationProps> = ({
   intensity,
-  position,
+  position: _position,
   animationType = 'float',
   isVisible = true,
   onAnimationComplete

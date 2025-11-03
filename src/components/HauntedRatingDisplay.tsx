@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '../store';
-import { HauntedRating, FactorBreakdown } from '../types';
-import { getTimeUntilNextRefresh, getActiveSession } from '../services/realTimeService';
+import { FactorBreakdown } from '../types';
+import { getTimeUntilNextRefresh } from '../services';
 
 // Helper function to get session key (duplicated from service for component use)
 const getSessionKey = (location: any): string => {

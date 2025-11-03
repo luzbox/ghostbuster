@@ -41,12 +41,15 @@ const baseEnvironmental: EnvironmentalFactors = {
     condition: WeatherCondition.CLEAR,
     temperature: 20,
     visibility: 10000,
-    precipitation: false
+    precipitation: false,
+    humidity: 50,
+    windSpeed: 5
   },
   time: {
     hour: 12,
     isNighttime: false,
-    timezone: 'America/New_York'
+    timezone: 'America/New_York',
+    localTime: '12:00:00 PM'
   },
   season: Season.SUMMER
 };
@@ -103,27 +106,27 @@ function testTimeScoring(): void {
   console.log('Testing time scoring...');
   
   // Witching hours (midnight to 3 AM)
-  assert(getTimeScore({ hour: 0, isNighttime: true, timezone: 'UTC' }) === 100, 'Midnight should score 100');
-  assert(getTimeScore({ hour: 1, isNighttime: true, timezone: 'UTC' }) === 100, '1 AM should score 100');
-  assert(getTimeScore({ hour: 2, isNighttime: true, timezone: 'UTC' }) === 100, '2 AM should score 100');
+  assert(getTimeScore({ hour: 0, isNighttime: true, timezone: 'UTC', localTime: '12:00 AM' }) === 100, 'Midnight should score 100');
+  assert(getTimeScore({ hour: 1, isNighttime: true, timezone: 'UTC', localTime: '1:00 AM' }) === 100, '1 AM should score 100');
+  assert(getTimeScore({ hour: 2, isNighttime: true, timezone: 'UTC', localTime: '2:00 AM' }) === 100, '2 AM should score 100');
   
   // Late evening (9 PM to midnight)
-  assert(getTimeScore({ hour: 21, isNighttime: true, timezone: 'UTC' }) === 80, '9 PM should score 80');
-  assert(getTimeScore({ hour: 22, isNighttime: true, timezone: 'UTC' }) === 80, '10 PM should score 80');
-  assert(getTimeScore({ hour: 23, isNighttime: true, timezone: 'UTC' }) === 80, '11 PM should score 80');
+  assert(getTimeScore({ hour: 21, isNighttime: true, timezone: 'UTC', localTime: '9:00 PM' }) === 80, '9 PM should score 80');
+  assert(getTimeScore({ hour: 22, isNighttime: true, timezone: 'UTC', localTime: '10:00 PM' }) === 80, '10 PM should score 80');
+  assert(getTimeScore({ hour: 23, isNighttime: true, timezone: 'UTC', localTime: '11:00 PM' }) === 80, '11 PM should score 80');
   
   // Twilight (6 PM to 9 PM)
-  assert(getTimeScore({ hour: 18, isNighttime: false, timezone: 'UTC' }) === 60, '6 PM should score 60');
-  assert(getTimeScore({ hour: 19, isNighttime: false, timezone: 'UTC' }) === 60, '7 PM should score 60');
-  assert(getTimeScore({ hour: 20, isNighttime: false, timezone: 'UTC' }) === 60, '8 PM should score 60');
+  assert(getTimeScore({ hour: 18, isNighttime: false, timezone: 'UTC', localTime: '6:00 PM' }) === 60, '6 PM should score 60');
+  assert(getTimeScore({ hour: 19, isNighttime: false, timezone: 'UTC', localTime: '7:00 PM' }) === 60, '7 PM should score 60');
+  assert(getTimeScore({ hour: 20, isNighttime: false, timezone: 'UTC', localTime: '8:00 PM' }) === 60, '8 PM should score 60');
   
   // Early morning (3 AM to 6 AM)
-  assert(getTimeScore({ hour: 3, isNighttime: true, timezone: 'UTC' }) === 70, '3 AM should score 70');
-  assert(getTimeScore({ hour: 4, isNighttime: true, timezone: 'UTC' }) === 70, '4 AM should score 70');
-  assert(getTimeScore({ hour: 5, isNighttime: true, timezone: 'UTC' }) === 70, '5 AM should score 70');
+  assert(getTimeScore({ hour: 3, isNighttime: true, timezone: 'UTC', localTime: '3:00 AM' }) === 70, '3 AM should score 70');
+  assert(getTimeScore({ hour: 4, isNighttime: true, timezone: 'UTC', localTime: '4:00 AM' }) === 70, '4 AM should score 70');
+  assert(getTimeScore({ hour: 5, isNighttime: true, timezone: 'UTC', localTime: '5:00 AM' }) === 70, '5 AM should score 70');
   
   // Daytime
-  assert(getTimeScore({ hour: 12, isNighttime: false, timezone: 'UTC' }) === 10, 'Noon should score 10');
+  assert(getTimeScore({ hour: 12, isNighttime: false, timezone: 'UTC', localTime: '12:00 PM' }) === 10, 'Noon should score 10');
   
   console.log('✓ Time scoring tests passed');
 }
@@ -151,12 +154,15 @@ function testRatingCalculation(): void {
       condition: WeatherCondition.CLEAR,
       temperature: 25,
       visibility: 15000,
-      precipitation: false
+      precipitation: false,
+      humidity: 40,
+      windSpeed: 3
     },
     time: {
       hour: 12,
       isNighttime: false,
-      timezone: 'UTC'
+      timezone: 'UTC',
+      localTime: '12:00 PM'
     },
     season: Season.SUMMER
   };
@@ -171,12 +177,15 @@ function testRatingCalculation(): void {
       condition: WeatherCondition.FOGGY,
       temperature: 5,
       visibility: 500,
-      precipitation: true
+      precipitation: true,
+      humidity: 90,
+      windSpeed: 15
     },
     time: {
       hour: 1, // 1 AM
       isNighttime: true,
-      timezone: 'UTC'
+      timezone: 'UTC',
+      localTime: '1:00 AM'
     },
     season: Season.AUTUMN
   };
@@ -234,15 +243,17 @@ function testEdgeCases(): void {
   console.log('Testing edge cases...');
   
   // Test boundary conditions for time scoring
-  assert(getTimeScore({ hour: 2, isNighttime: true, timezone: 'UTC' }) === 100, 'Hour 2 should be witching hour');
-  assert(getTimeScore({ hour: 3, isNighttime: true, timezone: 'UTC' }) === 70, 'Hour 3 should be early morning');
+  assert(getTimeScore({ hour: 2, isNighttime: true, timezone: 'UTC', localTime: '2:00 AM' }) === 100, 'Hour 2 should be witching hour');
+  assert(getTimeScore({ hour: 3, isNighttime: true, timezone: 'UTC', localTime: '3:00 AM' }) === 70, 'Hour 3 should be early morning');
   
   // Test extreme weather conditions
   const extremeWeather = {
     condition: WeatherCondition.FOGGY,
     temperature: -50,
     visibility: 0,
-    precipitation: true
+    precipitation: true,
+    humidity: 100,
+    windSpeed: 50
   };
   
   const extremeScore = getWeatherScore(extremeWeather);
@@ -256,12 +267,15 @@ function testEdgeCases(): void {
       condition: WeatherCondition.RAINY,
       temperature: 10,
       visibility: 2000,
-      precipitation: true
+      precipitation: true,
+      humidity: 85,
+      windSpeed: 12
     },
     time: {
       hour: 23,
       isNighttime: true,
-      timezone: 'UTC'
+      timezone: 'UTC',
+      localTime: '11:00 PM'
     },
     season: Season.WINTER
   };

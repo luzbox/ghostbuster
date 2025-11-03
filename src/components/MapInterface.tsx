@@ -38,7 +38,7 @@ export const MapInterface: React.FC<MapInterfaceProps> = ({
   // Performance monitoring
   const frameCount = useRef(0);
   const lastTime = useRef(performance.now());
-  const fpsInterval = useRef<number | null>(null);
+  // const _fpsInterval = useRef<number | null>(null);
 
   // Animation configuration
   const ANIMATION_CONFIG = {
@@ -112,21 +112,20 @@ export const MapInterface: React.FC<MapInterfaceProps> = ({
     return bearing;
   };
 
-  // Smooth zoom animation
-  const animateZoom = (targetZoom: number, duration: number = 1000) => {
-    if (!map.current || !isMapLoaded) return;
-
-    map.current.easeTo({
-      zoom: targetZoom,
-      duration,
-      easing: 'easeInOutCubic'
-    });
-  };
+  // Smooth zoom animation (unused)
+  // const _animateZoom = (targetZoom: number, duration: number = 1000) => {
+  //   if (!map.current || !isMapLoaded) return;
+  //   map.current.easeTo({
+  //     zoom: targetZoom,
+  //     duration,
+  //     easing: 'easeInOutCubic'
+  //   });
+  // };
 
   // Pulse animation for markers
   const createPulsingMarker = (intensity: number = 1) => {
     const size = Math.max(20, 20 + (intensity * 10));
-    const pulseSize = size + 10;
+    // const _pulseSize = size + 10;
     
     const markerElement = document.createElement('div');
     markerElement.className = 'pulsing-marker';
@@ -311,36 +310,32 @@ export const MapInterface: React.FC<MapInterfaceProps> = ({
     );
   };
 
-  // Remove ghost visualization
-  const removeGhostVisualization = (location: Location) => {
-    const ghostId = `ghost-${location.coordinates.latitude}-${location.coordinates.longitude}`;
-    
-    setGhostVisualizations(prev => 
-      prev.map(ghost => 
-        ghost.id === ghostId 
-          ? { ...ghost, isVisible: false }
-          : ghost
-      )
-    );
+  // Remove ghost visualization (unused)
+  // const _removeGhostVisualization = (location: Location) => {
+  //   const ghostId = `ghost-${location.coordinates.latitude}-${location.coordinates.longitude}`;
+  //   setGhostVisualizations(prev => 
+  //     prev.map(ghost => 
+  //       ghost.id === ghostId 
+  //         ? { ...ghost, isVisible: false }
+  //         : ghost
+  //     )
+  //   );
+  //   setTimeout(() => {
+  //     setGhostVisualizations(prev => 
+  //       prev.filter(ghost => ghost.id !== ghostId)
+  //     );
+  //   }, 1000);
+  // };
 
-    // Remove after animation completes
-    setTimeout(() => {
-      setGhostVisualizations(prev => 
-        prev.filter(ghost => ghost.id !== ghostId)
-      );
-    }, 1000);
-  };
-
-  // Clear all ghost visualizations
-  const clearAllGhostVisualizations = () => {
-    setGhostVisualizations(prev => 
-      prev.map(ghost => ({ ...ghost, isVisible: false }))
-    );
-
-    setTimeout(() => {
-      setGhostVisualizations([]);
-    }, 1000);
-  };
+  // Clear all ghost visualizations (unused)
+  // const _clearAllGhostVisualizations = () => {
+  //   setGhostVisualizations(prev => 
+  //     prev.map(ghost => ({ ...ghost, isVisible: false }))
+  //   );
+  //   setTimeout(() => {
+  //     setGhostVisualizations([]);
+  //   }, 1000);
+  // };
 
   // Toggle comparison mode
   const toggleComparisonMode = () => {
@@ -397,14 +392,14 @@ export const MapInterface: React.FC<MapInterfaceProps> = ({
     }
   };
 
-  // Get rating color based on score
-  const getRatingColor = (score: number): string => {
-    if (score >= 80) return 'text-red-400';
-    if (score >= 60) return 'text-orange-400';
-    if (score >= 40) return 'text-yellow-400';
-    if (score >= 20) return 'text-blue-400';
-    return 'text-gray-400';
-  };
+  // Get rating color based on score (unused)
+  // const _getRatingColor = (score: number): string => {
+  //   if (score >= 80) return 'text-red-400';
+  //   if (score >= 60) return 'text-orange-400';
+  //   if (score >= 40) return 'text-yellow-400';
+  //   if (score >= 20) return 'text-blue-400';
+  //   return 'text-gray-400';
+  // };
 
   // Format location name for display
   const formatLocationName = (location: Location): string => {

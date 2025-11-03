@@ -16,7 +16,7 @@ interface ProgressIndicatorProps {
 
 export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   steps,
-  // currentStep,
+  currentStep: _currentStep,
   className = ''
 }) => {
   const getStepIcon = (status: ProgressStep['status']) => {

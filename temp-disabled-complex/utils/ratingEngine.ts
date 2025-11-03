@@ -21,6 +21,8 @@ const LOCATION_SCORES: Record<LocationType, number> = {
   [LocationType.CASTLE]: 90,
   [LocationType.GRAVEYARD]: 85,
   [LocationType.ABANDONED_BUILDING]: 80,
+  [LocationType.FOREST]: 60,
+  [LocationType.HOSPITAL]: 70,
   [LocationType.FORT]: 70,
   [LocationType.REGULAR]: 10
 };
@@ -206,6 +208,8 @@ function getLocationDescription(locationType: LocationType): string {
     [LocationType.CASTLE]: 'Ancient castles are steeped in history and countless tales of tragedy, making them prime locations for supernatural activity. This location type has extremely high paranormal potential.',
     [LocationType.GRAVEYARD]: 'Graveyards and cemeteries are traditional gathering places for spirits, with strong connections to the afterlife. This location type has extremely high paranormal potential.',
     [LocationType.ABANDONED_BUILDING]: 'Abandoned structures often harbor residual energy from past inhabitants and traumatic events. This location type has very high paranormal potential.',
+    [LocationType.FOREST]: 'Ancient forests hold deep spiritual energy and have been sites of folklore and mystery for centuries. The natural environment can harbor supernatural entities. This location type has moderate paranormal potential.',
+    [LocationType.HOSPITAL]: 'Hospitals carry intense emotional energy from healing, suffering, and transitions between life and death. This creates strong spiritual imprints. This location type has high paranormal potential.',
     [LocationType.FORT]: 'Military fortifications carry the weight of battles fought and lives lost, creating powerful spiritual imprints. This location type has high paranormal potential.',
     [LocationType.REGULAR]: 'Regular locations have minimal supernatural associations, though spirits can manifest anywhere. This location type has limited paranormal potential.'
   };

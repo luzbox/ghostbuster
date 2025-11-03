@@ -1,30 +1,30 @@
-import { create } from 'zustand'
-import { HauntedRating, Location } from '../types'
+import { create } from 'zustand';
+import { HauntedRating, Location } from '../types';
 
 interface AppState {
-  // Rating state
-  hauntedRating: HauntedRating | null
-  isRatingExpanded: boolean
+  // Haunted rating state
+  hauntedRating: HauntedRating | null;
+  isRatingExpanded: boolean;
   
   // Location state
-  currentLocation: Location | null
-  locationHistory: Location[]
+  currentLocation: Location | null;
+  locationHistory: Location[];
   
   // UI state
-  isLoading: boolean
-  error: string | null
+  isLoading: boolean;
+  error: string | null;
   
   // Actions
-  setHauntedRating: (rating: HauntedRating | null) => void
-  toggleRatingExpanded: () => void
-  setCurrentLocation: (location: Location | null) => void
-  addToLocationHistory: (location: Location) => void
-  setLoading: (loading: boolean) => void
-  setError: (error: string | null) => void
-  clearError: () => void
+  setHauntedRating: (rating: HauntedRating | null) => void;
+  toggleRatingExpanded: () => void;
+  setCurrentLocation: (location: Location | null) => void;
+  addToLocationHistory: (location: Location) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  clearError: () => void;
 }
 
-export const useAppStore = create<AppState>((set) => ({
+export const useAppStore = create<AppState>((set, get) => ({
   // Initial state
   hauntedRating: null,
   isRatingExpanded: false,
@@ -47,15 +47,14 @@ export const useAppStore = create<AppState>((set) => ({
       (loc) => loc.name === location.name && 
                loc.coordinates.latitude === location.coordinates.latitude &&
                loc.coordinates.longitude === location.coordinates.longitude
-    )
+    );
     
     if (!exists) {
       return {
-        locationHistory: [location, ...state.locationHistory.slice(0, 9)] // Keep last 10
-      }
+        locationHistory: [location, ...state.locationHistory].slice(0, 10) // Keep last 10
+      };
     }
-    
-    return state
+    return state;
   }),
   
   setLoading: (loading) => set({ isLoading: loading }),
@@ -63,4 +62,4 @@ export const useAppStore = create<AppState>((set) => ({
   setError: (error) => set({ error }),
   
   clearError: () => set({ error: null })
-}))
+}));

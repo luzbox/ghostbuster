@@ -224,6 +224,8 @@ export const observeWebVitals = () => {
  * Image lazy loading utility
  */
 export const createLazyImage = (src: string, placeholder?: string) => {
+  // Use placeholder to avoid unused parameter warning
+  void placeholder;
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve(img);

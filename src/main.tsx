@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom/client'
 import App from './App-simple.tsx'
 import './index.css'
 
-// Performance and testing utilities
+// Performance and testing utilities (temporarily disabled)
 // import { PerformanceMonitor, observeWebVitals } from './utils/performance'
 // import { runDevelopmentTests } from './utils/testing'
 
-// Initialize performance monitoring
+// Initialize performance monitoring (temporarily disabled)
 // const monitor = PerformanceMonitor.getInstance()
 // monitor.startTimer('app_initialization')
 
@@ -28,7 +28,7 @@ root.render(
   </React.StrictMode>
 )
 
-// Log initialization time
+// Log initialization time (temporarily disabled)
 // monitor.endTimer('app_initialization')
 
 // Performance logging in development

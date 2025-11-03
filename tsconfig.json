@@ -5,7 +5,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "node"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -22,22 +22,6 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],
-  "exclude": [
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/utils/ratingEngine.ts",
-    "src/utils/testing.ts",
-    "src/services/api.ts",
-    "src/services/environmentalService.ts",
-    "src/services/locationService.ts",
-    "src/services/weatherService.ts",
-    "src/services/realTimeService.ts",
-    "src/components/SearchInterface.tsx",
-    "src/components/MapInterface.tsx",
-    "src/components/HauntedRatingDisplay.tsx",
-    "src/components/GhostVisualization.tsx",
-    "src/App.tsx"
-  ],
+  "exclude": ["src/**/*.test.tsx", "src/**/*.test.ts", "src/**/*.spec.tsx", "src/**/*.spec.ts", "temp-disabled-complex/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

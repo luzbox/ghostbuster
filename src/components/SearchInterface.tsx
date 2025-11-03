@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAppStore } from '../store';
-import { searchLocation, analyzeLocation, calculateHauntedRating } from '../services/api';
+import { searchLocationByName, analyzeLocation, calculateHauntedRating } from '../services';
 import { Location } from '../types';
 import { LoadingSpinner } from './LoadingSpinner';
 import { useDebounce } from '../hooks/useDebounce';
-import { parseError, logError, withErrorHandling } from '../utils/errorHandling';
+// Error handling is done inline with try/catch
 
 interface SearchSuggestion {
   id: string;
@@ -41,8 +41,8 @@ export const SearchInterface: React.FC = () => {
 
   // Memoized search function to prevent unnecessary re-renders
   const performSearch = useCallback(
-    withErrorHandling(
-      async (searchQuery: string) => {
+    async (searchQuery: string) => {
+      try {
         if (searchQuery.length < 2) {
           setSuggestions([]);
           setShowSuggestions(false);
@@ -52,28 +52,26 @@ export const SearchInterface: React.FC = () => {
         setIsSearching(true);
         clearError();
         
-        const response = await searchLocation(searchQuery);
-        const results = response.data || [];
-        const searchSuggestions: SearchSuggestion[] = results.map((result, index) => ({
-          id: `${result.location.coordinates.latitude}-${result.location.coordinates.longitude}-${index}`,
-          name: result.location.name,
-          address: result.location.address,
-          coordinates: result.location.coordinates
+        const response = await searchLocationByName(searchQuery);
+        const results = response || [];
+        const searchSuggestions: SearchSuggestion[] = results.map((result: any, index: number) => ({
+          id: `${result.coordinates.latitude}-${result.coordinates.longitude}-${index}`,
+          name: result.name,
+          address: result.address,
+          coordinates: result.coordinates
         }));
         
         setSuggestions(searchSuggestions);
         setShowSuggestions(true);
         setSelectedIndex(-1);
         setIsSearching(false);
-      },
-      'Location Search',
-      (errorInfo) => {
-        setError(errorInfo.userMessage);
+      } catch (error: any) {
+        setError(error.message || 'Search failed');
         setSuggestions([]);
         setShowSuggestions(false);
         setIsSearching(false);
       }
-    ),
+    },
     [clearError, setError]
   );
 
@@ -82,37 +80,31 @@ export const SearchInterface: React.FC = () => {
     performSearch(debouncedQuery);
   }, [debouncedQuery, performSearch]);
 
-  const handleLocationSelect = withErrorHandling(
-    async (suggestion: SearchSuggestion) => {
+  const handleLocationSelect = async (suggestion: SearchSuggestion) => {
+    try {
       setLoading(true);
       clearError();
       
       // Get detailed location information and calculate haunted rating in parallel
-      const [locationResponse, ratingResponse] = await Promise.all([
+      const [detailedLocation, ratingResponse] = await Promise.all([
         analyzeLocation(suggestion.coordinates),
         calculateHauntedRating({
           coordinates: suggestion.coordinates,
-          locationName: suggestion.name,
-          timestamp: new Date().toISOString()
-        })
+          locationName: suggestion.name
+        } as any)
       ]);
-
-      const detailedLocation = locationResponse.data.location;
-      const rating = ratingResponse.data;
       
       setCurrentLocation(detailedLocation);
-      setHauntedRating(rating);
+      setHauntedRating(ratingResponse as any); // Type assertion for now
       addToLocationHistory(detailedLocation);
       setQuery(suggestion.name);
       setShowSuggestions(false);
       setLoading(false);
-    },
-    'Location Selection',
-    (errorInfo) => {
-      setError(errorInfo.userMessage);
+    } catch (error: any) {
+      setError(error.message || 'Failed to select location');
       setLoading(false);
     }
-  );
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!showSuggestions || suggestions.length === 0) return;
@@ -150,7 +142,7 @@ export const SearchInterface: React.FC = () => {
     }
   };
 
-  const handleInputBlur = (e: React.FocusEvent) => {
+  const handleInputBlur = (_e: React.FocusEvent) => {
     // Delay hiding suggestions to allow for clicks
     setTimeout(() => {
       if (!suggestionsRef.current?.contains(document.activeElement)) {
@@ -160,32 +152,27 @@ export const SearchInterface: React.FC = () => {
     }, 150);
   };
 
-  const handleHistorySelect = withErrorHandling(
-    async (location: Location) => {
+  const handleHistorySelect = async (location: Location) => {
+    try {
       setLoading(true);
       clearError();
       
       // Calculate haunted rating for historical location
       const ratingResponse = await calculateHauntedRating({
         coordinates: location.coordinates,
-        locationName: location.name,
-        timestamp: new Date().toISOString()
-      });
+        locationName: location.name
+      } as any);
 
-      const rating = ratingResponse.data;
-      
       setCurrentLocation(location);
-      setHauntedRating(rating);
+      setHauntedRating(ratingResponse as any); // Type assertion for now
       setQuery(location.name);
       setShowSuggestions(false);
       setLoading(false);
-    },
-    'History Selection',
-    (errorInfo) => {
-      setError(errorInfo.userMessage);
+    } catch (error: any) {
+      setError(error.message || 'Failed to select location from history');
       setLoading(false);
     }
-  );
+  };
 
   return (
     <div className="relative w-full max-w-lg mx-auto">
