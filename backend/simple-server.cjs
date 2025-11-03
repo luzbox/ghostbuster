@@ -73,6 +73,28 @@ app.get('/api/location/search', (req, res) => {
   });
 });
 
+// Mock location analyze endpoint (for map clicks)
+app.get('/api/location/analyze', (req, res) => {
+  const { lat, lng } = req.query;
+  
+  const latitude = parseFloat(lat) || 0;
+  const longitude = parseFloat(lng) || 0;
+  
+  // Generate a mock location based on coordinates
+  const mockLocation = {
+    name: `Location ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
+    address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
+    coordinates: { latitude, longitude },
+    type: 'regular',
+    nearbyPOIs: []
+  };
+  
+  res.json({
+    success: true,
+    data: mockLocation
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Ghostbuster Backend running on http://localhost:${PORT}`);
   console.log(`📡 Health check: http://localhost:${PORT}/health`);

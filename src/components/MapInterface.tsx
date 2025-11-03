@@ -474,7 +474,9 @@ export const MapInterface: React.FC<MapInterfaceProps> = ({
         // Set access token
         const accessToken = (import.meta.env as any).VITE_MAPBOX_ACCESS_TOKEN;
         if (!accessToken) {
-          setError('Mapbox access token is not configured. Please check your environment variables.');
+          console.warn('Mapbox access token not configured');
+          setIsMapLoaded(false);
+          // Don't call setError to avoid infinite loops, just fail silently
           return;
         }
         
@@ -548,10 +550,9 @@ export const MapInterface: React.FC<MapInterfaceProps> = ({
       if (map.current) {
         map.current.remove();
         map.current = null;
-        setIsMapLoaded(false);
+        // Don't update state during cleanup to avoid React warnings
       }
-      // Clear all ghost visualizations
-      setGhostVisualizations([]);
+      // Don't clear state during cleanup
     };
   }, [onLocationSelect, setError]);
 
@@ -595,6 +596,26 @@ export const MapInterface: React.FC<MapInterfaceProps> = ({
       updateGhostVisualization(currentLocation, hauntedRating);
     }
   }, [hauntedRating]);
+
+  // Check if Mapbox token is available
+  const hasMapboxToken = !!(import.meta.env as any).VITE_MAPBOX_ACCESS_TOKEN;
+
+  if (!hasMapboxToken) {
+    return (
+      <div className={`relative w-full h-full ${className}`}>
+        <div className="w-full h-full rounded-lg overflow-hidden bg-gray-800 flex items-center justify-center" style={{ minHeight: '400px' }}>
+          <div className="text-center p-6">
+            <div className="text-4xl mb-4">🗺️</div>
+            <h3 className="text-lg font-semibold text-gray-300 mb-2">Map Unavailable</h3>
+            <p className="text-gray-400 text-sm">
+              Mapbox access token not configured.<br />
+              Add VITE_MAPBOX_ACCESS_TOKEN to your .env file.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`relative w-full h-full ${className}`}>

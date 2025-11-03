@@ -182,6 +182,8 @@ export const HauntedRatingDisplay: React.FC = () => {
     currentLocation 
   } = useAppStore();
 
+  // Debug logging removed - issue was API response not being extracted properly
+
   const [timeUntilRefresh, setTimeUntilRefresh] = useState<number | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -242,7 +244,9 @@ export const HauntedRatingDisplay: React.FC = () => {
   };
 
   const description = getRatingDescription(hauntedRating.overallScore);
-  const maxContribution = Math.max(...hauntedRating.breakdown.map(f => f.contribution));
+  const maxContribution = hauntedRating.breakdown && hauntedRating.breakdown.length > 0 
+    ? Math.max(...hauntedRating.breakdown.map(f => f.contribution))
+    : 0;
 
   return (
     <motion.div
@@ -339,7 +343,7 @@ export const HauntedRatingDisplay: React.FC = () => {
                 Contributing Factors
               </h3>
               
-              {hauntedRating.breakdown.map((factor, index) => (
+              {hauntedRating.breakdown && hauntedRating.breakdown.map((factor, index) => (
                 <FactorBar
                   key={`${factor.factor}-${index}`}
                   factor={factor}

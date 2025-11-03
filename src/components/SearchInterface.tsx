@@ -95,7 +95,9 @@ export const SearchInterface: React.FC = () => {
       ]);
       
       setCurrentLocation(detailedLocation);
-      setHauntedRating(ratingResponse as any); // Type assertion for now
+      // Extract the actual rating data from the API response
+      const rating = (ratingResponse as any).data || ratingResponse;
+      setHauntedRating(rating);
       addToLocationHistory(detailedLocation);
       setQuery(suggestion.name);
       setShowSuggestions(false);
@@ -164,7 +166,9 @@ export const SearchInterface: React.FC = () => {
       } as any);
 
       setCurrentLocation(location);
-      setHauntedRating(ratingResponse as any); // Type assertion for now
+      // Extract the actual rating data from the API response
+      const rating = (ratingResponse as any).data || ratingResponse;
+      setHauntedRating(rating);
       setQuery(location.name);
       setShowSuggestions(false);
       setLoading(false);

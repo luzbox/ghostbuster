@@ -184,7 +184,10 @@ const searchPlacesWithGoogle = async (query: string): Promise<PlacesApiResponse>
  * Geocode using Mapbox Geocoding API
  */
 const geocodeWithMapbox = async (query: string): Promise<GeocodingApiResponse> => {
+  console.log('🔍 Geocoding with Mapbox:', query);
+  
   if (!MAPBOX_ACCESS_TOKEN) {
+    console.error('❌ Mapbox token missing');
     throw new ApiError(
       'Mapbox access token not configured',
       'MISSING_API_KEY',
@@ -193,12 +196,21 @@ const geocodeWithMapbox = async (query: string): Promise<GeocodingApiResponse> =
     );
   }
 
-  const url = `${MAPBOX_GEOCODING_URL}/${encodeURIComponent(query)}.json?access_token=${MAPBOX_ACCESS_TOKEN}&limit=5`;
+  // For reverse geocoding (coordinates), don't use limit parameter
+  // For forward geocoding (text search), use limit parameter
+  const isReverseGeocoding = query.match(/^-?\d+\.?\d*,-?\d+\.?\d*$/);
+  const url = isReverseGeocoding 
+    ? `${MAPBOX_GEOCODING_URL}/${encodeURIComponent(query)}.json?access_token=${MAPBOX_ACCESS_TOKEN}&types=poi,address,place`
+    : `${MAPBOX_GEOCODING_URL}/${encodeURIComponent(query)}.json?access_token=${MAPBOX_ACCESS_TOKEN}&limit=5`;
+  console.log('🌐 Mapbox URL:', url);
   
   try {
     const response = await fetch(url);
+    console.log('📡 Mapbox response status:', response.status);
     
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Mapbox API error:', response.status, errorText);
       throw new ApiError(
         `Mapbox Geocoding error: ${response.status}`,
         `MAPBOX_API_${response.status}`,
@@ -207,7 +219,9 @@ const geocodeWithMapbox = async (query: string): Promise<GeocodingApiResponse> =
       );
     }
     
-    return await response.json();
+    const data = await response.json();
+    console.log('✅ Mapbox response:', data);
+    return data;
   } catch (error) {
     if (error instanceof ApiError) {
       throw error;
@@ -410,17 +424,21 @@ export const searchLocations = async (query: string): Promise<LocationSearchResu
 export const analyzeLocation = async (
   coordinates: { latitude: number; longitude: number }
 ): Promise<Location> => {
+  console.log('🎯 Analyzing location:', coordinates);
+  
   const { latitude, longitude } = coordinates;
   const cacheKey = getLocationCacheKey(latitude, longitude);
   const cached = getCachedLocation(cacheKey);
   
   if (cached) {
+    console.log('💾 Using cached location:', cached.name);
     return cached;
   }
   
   try {
     // Try reverse geocoding with Mapbox first
     const reverseQuery = `${longitude},${latitude}`;
+    console.log('🔄 Starting Mapbox geocoding...');
     const mapboxData = await geocodeWithMapbox(reverseQuery);
     
     if (mapboxData.features && mapboxData.features.length > 0) {
